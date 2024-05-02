@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Print 10 times Holberton use the loop for
+# Print 10 times Best School using the for loop
 
 for (( k=0; k<10; k++ ))
 do
-   echo "Holberton School"
+   echo "Best School"
 done
