@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Bash script to display numbers from 1 to 100
+
+for (( k=1; k<=100; k++))
+do
+    if (( k % 3 == 0 && k % 5 == 0))
+    then
+	echo "FizzBuzz"
+    elif (( k % 3 == 0 ))
+    then
+	echo "Fizz"
+    elif (( k % 5 == 0))
+    then
+       	echo "Buzz"
+    else
+	echo "$k"
+    fi
+done
