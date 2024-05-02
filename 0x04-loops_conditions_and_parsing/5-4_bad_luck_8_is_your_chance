@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Print Best School  8 times using  While Loop
+# but for 4th iteration, will display bad luck and
+# the in the 8th iteration display good luck
+
+k=1
+while [ $k -le 10 ]
+do
+    if [ "$k" -eq 4 ]
+    then
+	echo "bad luck"
+    elif [ "$k" -eq 8 ]
+    then
+	echo "good luck"
+    else
+	echo "Best School"
+    fi
+
+    ((k++))
+done
