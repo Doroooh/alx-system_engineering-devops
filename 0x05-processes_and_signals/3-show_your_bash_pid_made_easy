@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# script dto isplay PID, along with process name of processes containing the word bash
+# cannot use p s
+pgrep -l bash
