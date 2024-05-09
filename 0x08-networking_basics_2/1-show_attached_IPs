@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Show the attached IPs
+
+hostname -I | cut -d' ' -f1 ; hostname -i
