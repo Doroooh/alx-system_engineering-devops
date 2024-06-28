@@ -1,4 +1,4 @@
-# Executes a bash command
+# Executing the bash command
 exec { 'kill':
   command => 'pkill -f killmenow',
   path    => ['/usr/bin', '/usr/sbin']
