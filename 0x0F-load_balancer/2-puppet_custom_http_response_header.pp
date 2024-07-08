@@ -1,4 +1,4 @@
-#automate task 0 but with Puppet
+# automating the task 0 but with Puppet
 
 exec {'update':
   command => '/usr/bin/apt-get update',
