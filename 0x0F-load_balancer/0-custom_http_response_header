@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# configuring a new ubuntu machine
+# Installing Nginx with a server 0x01 config
+#+ add HTTP header named X-Served-By $HOSTNAME
+
+apt-get update
+apt-get install -y nginx
+
+mkdir -p /var/www/html
