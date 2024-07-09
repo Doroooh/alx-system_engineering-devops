@@ -6,4 +6,12 @@
 apt-get update
 apt-get install -y nginx
 
-mkdir -p /var/www/html
+custom_header='http {\
+	add_header X-Served-By \$HOSTNAME;'
+file='/etc/nginx/nginx.conf'
+
+sudo apt -y update
+sudo apt -y upgrade
+sudo apt -y install nginx
+sudo sed -i s@'http {'@"$custom_header"@g "$file"
+sudo service nginx restart
