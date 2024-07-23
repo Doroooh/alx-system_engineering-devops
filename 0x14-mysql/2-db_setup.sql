@@ -13,5 +13,5 @@ INSERT INTO nexus6 VALUES
 ;
 
 USE mysql;
-GRANT SELECT ON tyrell_corp.nexus6 TO 'holberton_user'@'localhost';
+GRANT SELECT ON tyrell_corp.nexus6 TO 'alx_user'@'localhost';
 FLUSH PRIVILEGES;
