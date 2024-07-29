@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
- data export CSV format
+ data export CSV format.
 """
 from requests import get
 from sys import argv
