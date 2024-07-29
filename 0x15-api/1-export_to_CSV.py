@@ -1,35 +1,34 @@
 #!/usr/bin/python3
 
 """
-Python script that exports data in the CSV format
+in this python script, there will be data export CSV format
 """
-
 from requests import get
 from sys import argv
 import csv
 
 if __name__ == "__main__":
     response = get('https://jsonplaceholder.typicode.com/todos/')
-    data = response.json()
+    employeedata = response.json()
 
-    row = []
-    response2 = get('https://jsonplaceholder.typicode.com/users')
-    data2 = response2.json()
+    therow = []
+    secondresponse = get('https://jsonplaceholder.typicode.com/users')
+    emplsecdata = secondresponse.json()
 
-    for i in data2:
-        if i['id'] == int(argv[1]):
-            employee = i['username']
+    for t in emplsecdata:
+        if t['id'] == int(argv[1]):
+            employee = t['username']
 
     with open(argv[1] + '.csv', 'w', newline='') as file:
         writ = csv.writer(file, quoting=csv.QUOTE_ALL)
 
-        for i in data:
+        for t in employeedata:
 
-            row = []
-            if i['userId'] == int(argv[1]):
-                row.append(i['userId'])
-                row.append(employee)
-                row.append(i['completed'])
-                row.append(i['title'])
+            therow = []
+            if t['userId'] == int(argv[1]):
+                therow.append(t['userId'])
+                therow.append(employee)
+                therow.append(t['completed'])
+                therow.append(t['title'])
 
                 writ.writerow(row)
