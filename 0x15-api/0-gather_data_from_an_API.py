@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-use employee ID to return data on the TODO list
+using employee ID to return data on the TODO list
 """
 
 from requests import get
