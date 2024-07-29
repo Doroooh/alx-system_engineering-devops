@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-Python script that exports data in the JSON format.
+The Python script to export data in JSON format.
 """
 
 from requests import get
@@ -10,32 +10,32 @@ import json
 
 if __name__ == "__main__":
     response = get('https://jsonplaceholder.typicode.com/todos/')
-    data = response.json()
+    employeedata = response.json()
 
-    row = []
-    response2 = get('https://jsonplaceholder.typicode.com/users')
-    data2 = response2.json()
+    therow = []
+    secondresponse = get('https://jsonplaceholder.typicode.com/users')
+    emplsecdata = secondresponse.json()
 
-    for i in data2:
-        if i['id'] == int(argv[1]):
-            u_name = i['username']
-            id_no = i['id']
+    for t in emplsecdata:
+        if t['id'] == int(argv[1]):
+            u_name = t['username']
+            id_no = t['id']
 
-    row = []
+    therow = []
 
-    for i in data:
+    for t in employeedata:
 
-        new_dict = {}
+        newdictn = {}
 
-        if i['userId'] == int(argv[1]):
-            new_dict['username'] = u_name
-            new_dict['task'] = i['title']
-            new_dict['completed'] = i['completed']
-            row.append(new_dict)
+        if t['userId'] == int(argv[1]):
+            newdictn['username'] = u_name
+            newdictn['task'] = t['title']
+            newdictn['completed'] = t['completed']
+            therow.append(newdictn)
 
-    final_dict = {}
-    final_dict[id_no] = row
-    json_obj = json.dumps(final_dict)
+    enddict = {}
+    enddict[id_no] = therow
+    json_obj = json.dumps(enddict)
 
     with open(argv[1] + ".json",  "w") as f:
         f.write(json_obj)
