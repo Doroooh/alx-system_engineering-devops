@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-This Python script uses the REST API for an employee ID to return data on the progress of the todo list.
+Python script that utilizes an API to retrieve an employees to do with the employee ID
 """
 
 from requests import get
@@ -10,27 +10,27 @@ from sys import argv
 
 if __name__ == "__main__":
     response = get('https://jsonplaceholder.typicode.com/todos/')
-    employeedata = response.json()
+    data = response.json()
     completed = 0
-    totlvalue = 0
-    todo = []
-    secondresponse = get('https://jsonplaceholder.typicode.com/users')
-    employeedatatwo = secondresponse.json()
+    ttl = 0
+    tasks = []
+    responsetwo = get('https://jsonplaceholder.typicode.com/users')
+    datatwo = responsetwo.json()
 
-    for t in employeedatatwo:
-        if t.get('id') == int(argv[1]):
-            employee = t.get('name')
+    for k in datatwo:
+        if k.get('id') == int(argv[1]):
+            employee = k.get('name')
 
-    for t in employeedata:
-        if t.get('userId') == int(argv[1]):
-            totlvalue += 1
+    for k in data:
+        if k.get('userId') == int(argv[1]):
+            total += 1
 
-            if t.get('completed') is True:
+            if k.get('completed') is True:
                 completed += 1
-                todo.append(t.get('title'))
+                tasks.append(k.get('title'))
 
-    print("Employee {} is done with todo({}/{}):".format(employee, completed,
-                                                          totlvalue))
+    print("Employee {} is done with tasks({}/{}):".format(employee, completed,
+                                                          ttl))
 
-    for t in todo:
-        print("\t {}".format(t))
+    for k in tasks:
+        print("\t {}".format(k))
