@@ -1,36 +1,34 @@
 #!/usr/bin/python3
-"""
-Script to retrieve the number of subscribers for a specific subreddit using the Reddit API.
-"""
-import requests  # Import the requests module for handling HTTP requests
+"""Module that consumes the Reddit API and returns the number of subscribers"""
+import requests
 
-def get_subscriber_count(subreddit):
+
+def number_of_subscribers(subreddit):
+    """Queries the Reddit API and returns the number of subscribers (not
+    active users, total subscribers) for a given subreddit.
+
+    If not valid subreddit, return 0.
+    Invalid subreddits may return a redirect to search results. Ensure that
+    you are not following redirects.
+
+    Args:
+        subreddit (str): subreddit
+    Returns:
+        int: number of subscribers
     """
-    Fetch and return the number of subscribers for a given subreddit.
+    base_url = 'https://www.reddit.com/hawih/'
 
-    :param subreddit: The name of the subreddit to query
-    :return: The number of subscribers, or 0 if the subreddit is not found
-    """
-    # Formulate the API URL to fetch subreddit details
-    api_endpoint = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-
-    # Define custom headers to avoid potential issues with the Reddit API
-    user_agent = {'User-Agent': 'CustomClient/2.0 (Contact: developer@example.com)'}
-
-    # Make a GET request to the Reddit API
-    response = requests.get(api_endpoint, headers=user_agent, allow_redirects=False)
-
-    # Check if the request was successful by examining the status code
-    if response.status_code == 200:
-        # Convert the response to a JSON object
-        subreddit_info = response.json()
-
-        # Extract the number of subscribers from the JSON data
-        subscriber_count = subreddit_info.get('data', {}).get('subscribers', 0)
-
-        return subscriber_count  # Return the number of subscribers
-    else:
-        return 0  # Return 0 if the subreddit is not found or the request fails
-
-# Example usage:
-# print(get_subscriber_count('learnpython'))  # Uncomment to test with 'learnpython' subreddit
+    url = '{}{}/about.json'.format(base_url, subreddit)
+    headers = {
+        'User-Agent':
+        'Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.3) \
+        Gecko/20100401 Firefox/3.6.3 (FM Scene 4.6.1)'
+    }
+    results = requests.get(
+        url,
+        headers=headers,
+        allow_redirects=False
+    )
+    if results.status_code == 200:
+        return results.json()['data']['subscribers']
+    return 0
