@@ -17,12 +17,12 @@ def recurse(subreddit, hot_list=[], n=0, after=None):
     """
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     headers = {'user-agent': 'custom'}
-    hawih = requests.get(url, headers=headers, allow_redirects=False)
-    if hawih.status_code == 200:
-        hawih = hawih.json()
-        for post in hawih.get('data').get('children'):
+    r = requests.get(url, headers=headers, allow_redirects=False)
+    if r.status_code == 200:
+        r = r.json()
+        for post in r.get('data').get('children'):
             hot_list.append(post.get('data').get('title'))
-        if hawih.get('data').get('after'):
+        if r.get('data').get('after'):
             recurse(subreddit, hot_list)
         return hot_list
     else:
