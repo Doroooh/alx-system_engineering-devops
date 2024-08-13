@@ -1,21 +1,27 @@
 #!/usr/bin/python3
-""" Exporting csv files"""
-import json
+#!/usr/bin/python3
+"""A script to fetch the subscriber count of a specified subreddit using Reddit's API."""
 import requests
-import sys
 
+def get_subreddit_subscribers(subreddit_name):
+    """
+    Fetch and return the number of subscribers for a given subreddit.
 
-def number_of_subscribers(subreddit):
-    """Read reddit API and return number subscribers """
-    username = 'ledbag123'
-    password = 'Reddit72'
-    user_pass_dict = {'user': username, 'passwd': password, 'api_type': 'json'}
-    headers = {'user-agent': '/u/ledbag123 API Python for Holberton School'}
-    url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
-    client = requests.session()
-    client.headers = headers
-    r = client.get(url, allow_redirects=False)
-    if r.status_code == 200:
-        return (r.json()["data"]["subscribers"])
-    else:
-        return(0)
+    Args:
+        subreddit_name (str): The name of the subreddit to query.
+
+    Returns:
+        int: The number of subscribers, or 0 if the subreddit is not found.
+    """
+    reddit_url = f"https://www.reddit.com/r/{subreddit_name}/about.json"
+    custom_headers = {
+        'User-Agent': 'CustomAgent/1.1 (Contact: example@example.com)'
+    }
+
+    try:
+        response = requests.get(reddit_url, headers=custom_headers, timeout=5)
+        response.raise_for_status()
+        subreddit_data = response.json().get('data', {})
+        return subreddit_data.get('subscribers', 0)
+    except (requests.RequestException, ValueError):
+        return 0

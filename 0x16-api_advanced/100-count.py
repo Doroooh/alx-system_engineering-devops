@@ -1,91 +1,46 @@
 #!/usr/bin/python3
-""" Functions to adcquire info from API Reddit"""
+"""Script to count occurrences of specified words in the titles of hot posts on a Reddit subreddit."""
 import requests
-after = None
 
+def count_keyword_occurrences(subreddit, keywords, after_token=None, word_count=None):
+    """
+    Recursively count and display occurrences of specified words in hot post titles on a subreddit.
 
-def count_words(subreddit, word_list):
-    """Count the titles found with wordlist in subreddit"""
-    my_list = recurse(subreddit)
-    my_dict = {}
+    Args:
+        subreddit (str): The name of the subreddit to search.
+        keywords (list): List of words to count in the titles.
+        after_token (str): Token for the next page of results (for pagination).
+        word_count (dict): Dictionary to store word counts.
+    """
+    if word_count is None:
+        word_count = {}
 
-    if my_list:
-        for word in word_list:
-            my_dict[word] = 0
+    api_url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    request_headers = {'User-Agent': 'UniqueUserAgent/3.0 (Contact: user@example.com)'}
+    query_params = {'limit': 100, 'after': after_token}
 
-        for title in my_list:
-            title_split = title.split(" ")
+    try:
+        response = requests.get(api_url, headers=request_headers, params=query_params, timeout=5)
+        response.raise_for_status()
+        hot_posts_data = response.json().get('data', {})
+        after_token = hot_posts_data.get('after', None)
+        posts = hot_posts_data.get('children', [])
 
-            for iter in title_split:
-                for iter_split in word_list:
-                    if iter.lower() == iter_split.lower():
-                        my_dict[iter_split] += 1
+        for post in posts:
+            title = post['data'].get('title', '').lower().split()
+            for keyword in keywords:
+                keyword_lower = keyword.lower()
+                if keyword_lower in title:
+                    occurrences = title.count(keyword_lower)
+                    word_count[keyword_lower] = word_count.get(keyword_lower, 0) + occurrences
 
-        for key, val in sorted(my_dict.items(),  key=lambda x: x[1],
-                               reverse=True):
-            if val != 0:
-                print("{}: {}".format(key, val))
-
-
-def recurse(subreddit, hot_list=[]):
-    """ recurse is a function that return hot list from
-        a subreddit"""
-    global after
-    headers = {'User-Agent': 'ledbag123'}
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    parameters = {'after': after}
-    response = requests.get(url, headers=headers, allow_redirects=False,
-                            params=parameters)
-    if response.status_code == 200:
-        prox = response.json().get('data').get('after')
-
-        if prox is not None:
-            after = prox
-            recurse(subreddit, hot_list)
-        list_titles = response.json().get('data').get('children')
-
-        for title_ in list_titles:
-            hot_list.append(title_.get('data').get('title'))
-        return hot_list
-    else:
-        return (None)
-'''    
-#!/usr/bin/python3
-""" Exporting csv files"""
-import json
-import requests
-import sys
-
-
-def count_words(subreddit, word_list, after="null", host_list=[]):
-    """Read reddit API and return top 10 hotspots """
-    username = 'ledbag123'
-    password = 'Reddit72'
-    user_pass_dict = {'user': username, 'passwd': password, 'api_type': 'json'}
-    headers = {'user-agent': '/u/ledbag123 API Python for Holberton School'}
-    payload = {"limit": "100", "after": after}
-    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
-    client = requests.session()
-    client.headers = headers
-    r = client.get(url, allow_redirects=False, params=payload)
-    if r.status_code == 200:
-        list_titles = r.json()['data']['children']
-        after = r.json()['data']['after']
-        if after is not None:
-            try:
-                host_list.append(list_titles[len(host_list)]['data']['title'])
-            except:
-                pass
-            count_words(subreddit, word_list, after, host_list)
+        if after_token:
+            return count_keyword_occurrences(subreddit, keywords, after_token, word_count)
         else:
-            my_count = [0] * len(word_list)
-            for title in host_list:
-                for pos in range(len(word_list)):
-                    counter = len([x for x in title.split()
-                                   if x == word_list[pos]])
-                    my_count[pos] += counter
-            for pos in range(len(word_list)):
-                print("{}: {}".format(word_list[pos], my_count[pos]))
-    else:
-        return(None)
-'''
+            if word_count:
+                sorted_word_count = sorted(word_count.items(), key=lambda x: (-x[1], x[0]))
+                for word, count in sorted_word_count:
+                    print(f"{word}: {count}")
+
+    except (requests.RequestException, ValueError) as error:
+        print(f"Error occurred: {error}")
