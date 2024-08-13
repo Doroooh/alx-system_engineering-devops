@@ -1,4 +1,4 @@
-i#!/usr/bin/python3
+#!/usr/bin/python3
 
 """Module to consume Reddit API and print titles of first ten hot posts listed for a given subreddit."""
 
