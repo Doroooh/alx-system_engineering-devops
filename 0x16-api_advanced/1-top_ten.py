@@ -1,8 +1,8 @@
 i#!/usr/bin/python3
-"""Module that consumes the Reddit API and prints the titles of the first
-10 hot posts listed for a given subreddit."""
-import requests
 
+"""Module to consume Reddit API and print titles of first ten hot posts listed for a given subreddit."""
+
+import requests
 
 def top_ten(subreddit):
     """Queries the Reddit API and prints the titles of the first 10 hot
@@ -16,7 +16,7 @@ def top_ten(subreddit):
         subreddit (str): subreddit
 
     Returns:
-        str: titles of the first 10 hot posts
+        str: title of first ten hot posts
     """
     base_url = 'https://www.reddit.com'
     sort = 'top'
