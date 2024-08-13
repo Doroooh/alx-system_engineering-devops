@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-"""Module for task 3"""
 
+"""Function to count words in all hot posts of a given Reddit subreddit."""
 
 def count_words(subreddit, word_list, word_count={}, after=None):
     """Queries the Reddit API and returns the count of words in
