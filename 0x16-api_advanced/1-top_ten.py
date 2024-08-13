@@ -1,31 +1,40 @@
-#!/usr/bin/python3
-"""Script to retrieve and display the titles of the top 10 hot posts from a subreddit using Reddit's API."""
+i#!/usr/bin/python3
+"""Module that consumes the Reddit API and prints the titles of the first
+10 hot posts listed for a given subreddit."""
 import requests
 
-def fetch_top_ten_posts(subreddit_name):
-    """
-    Retrieve and print the titles of the top 10 hot posts for a given subreddit.
+
+def top_ten(subreddit):
+    """Queries the Reddit API and prints the titles of the first 10 hot
+    posts listed for a given subreddit.
+
+    If not a valid subreddit, print None.
+    Invalid subreddits may return a redirect to search results. Ensure
+    that you are not following redirects.
 
     Args:
-        subreddit_name (str): The name of the subreddit to query.
+        subreddit (str): subreddit
+
+    Returns:
+        str: titles of the first 10 hot posts
     """
-    reddit_url = f"https://www.reddit.com/r/{subreddit_name}/hot.json"
-    custom_headers = {
-        'User-Agent': 'UniqueUserAgent/2.0 (Contact: example@domain.com)'
+    base_url = 'https://www.reddit.com'
+    sort = 'top'
+    limit = 10
+    url = '{}/r/{}/.json?sort={}&limit={}'.format(
+        base_url, subreddit, sort, limit)
+    headers = {
+        'User-Agent':
+        'Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.3) \
+        Gecko/20100401 Firefox/3.6.3 (FM Scene 4.6.1)'
     }
-    query_params = {'limit': 10}  # Retrieve only the top 10 posts
-
-    try:
-        response = requests.get(reddit_url, headers=custom_headers, params=query_params, timeout=5)
-        response.raise_for_status()
-        hot_posts = response.json().get('data', {}).get('children', [])
-
-        if not hot_posts:
-            print("No hot posts found.")
-        else:
-            for post in hot_posts:
-                post_title = post.get('data', {}).get('title', 'Untitled')
-                print(post_title)
-    except (requests.RequestException, ValueError) as error:
-        print(f"Failed to fetch data: {error}")
-
+    response = requests.get(
+        url,
+        headers=headers,
+        allow_redirects=False
+    )
+    if response.status_code == 200:
+        for post in response.json()['data']['children'][0:10]:
+            print(post['data']['title'])
+    else:
+        print(None)
