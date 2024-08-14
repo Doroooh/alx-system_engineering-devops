@@ -1,6 +1,5 @@
-# Fixes a faulty wordpress site
-exec { 'fix-wordpress':
-  command => 'bash -c "sed -i s/class-wp-locale.phpp/class-wp-locale.php/ \
-/var/www/html/wp-settings.php; service apache2 restart"',
-  path    => '/usr/bin:/usr/sbin:/bin'
+# Creating manifest to fix file name typo
+exec { 'fix_typo':
+  command => '/bin/mv /var/www/html/wp-includes/class-wp-locale.php /var/www/html/wp-includes/class-wp-locale.phpp',
+  onlyif  => '/bin/test -f /var/www/html/wp-includes/class-wp-locale.php',
 }
