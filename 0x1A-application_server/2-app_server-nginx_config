@@ -1,15 +1,38 @@
 server {
-        listen 80 default_server;
-	listen [::]:80 default_server;
-	add_header X-Served-By "2177-web-01";
-	root /var/www/html;
-	index index.html index.htm;
-	location /airbnb-onepage/ {
-		alias ~/Airbnb_clone_v2/;
-		index index.html index.htm;
-		proxy_pass http://0.0.0.0:5000;
-	}
-	rewrite ^/redirect_me https://github.com/EstephaniaCalvoC/ permanent;
-        error_page 404 /my_404.html;
-        location = /my_404.html {root /usr/share/nginx/html; internal;}
+    # Listening on port 80 for the HTTP requests, defaulting for the server block
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    # Adding custom header for server identification to handle request
+    add_header X-Served-By "64760-web-01";
+
+    # Setting root directory for the static files served by the server block
+    root /var/www/html;
+
+    # Default file, to serve when directory is requested
+    index index.html index.htm;
+
+    # Handling requests for /airbnb-onepage/ path
+    location /airbnb-onepage/ {
+        # Mapping the request to a specific directory with the Airbnb clone project
+        alias ~/Airbnb_clone_v2/;
+        
+        # Serving default index files for location
+        index index.html index.htm;
+
+        # Proxy requests to the backend service running on port 5000
+        proxy_pass http://0.0.0.0:5000;
+    }
+
+    # Permanent redirect from /redirect_me to the specified GitHub repository
+    rewrite ^/redirect_me https://github.com/Doroooh/ permanent;
+
+    # Custom error page
+    error_page 404 /my_404.html;
+
+    # Serve the custom 404 page from a specific directory
+    location = /my_404.html {
+        root /usr/share/nginx/html;
+        internal;  # Internal directive ensures this page is only accessible during an error
+    }
 }
