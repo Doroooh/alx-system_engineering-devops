@@ -1,6 +1,6 @@
-echo "Updating Packages and Installing Requirements"
+echo "Update the Packages and Install Requirements"
 
-# Update Package Manager
+# the update Package Manager
 sudo apt-get update
 sudo apt-get install -y nginx
 # Install pip
@@ -9,25 +9,25 @@ sudo apt-get install -y python3-pip
 pip install flask
 pip install flask_cors
 pip install sqlalchemy
-# Install net-tools
+# net-tools installation
 sudo apt install -y net-tools
-# Install GUNICORN
+# GUNICORN installation
 sudo apt-get install -y gunicorn
-# Remove any current AIRBNB Repositoty
+# Removing any AIRBNB Repositoty
 rm -rf AirBnB_clone_v*
 # Clone My Repository
 git clone https://github.com/Doroooh/AirBnB_clone_v2
 git clone https://github.com/Doroooh/AirBnB_clone_v3
 git clone https://github.com/Doroooh/AirBnB_clone_v4
-# Change Directory
+# Changing the Directory
 cd AirBnB_clone_v2
-# Switch Branches
+# Switching the branches
 git checkout app-server
 
-# Define the path to the Nginx configuration file to be overwritten
+# Defining path to Nginx configuration file to overwrite
 NGINX_CONFIG="/etc/nginx/sites-enabled/default"
 
-# Overwrite the Nginx configuration file with the provided configuration
+# Overwriting Nginx configuration file 
 sudo tee "$NGINX_CONFIG" > /dev/null <<EOF
 server {
     listen 80 default_server;
@@ -66,16 +66,16 @@ server {
 }
 EOF
 
-# Restart Nginx to apply the changes
+# Restarting Nginx and applying changes
 sudo systemctl restart nginx
 
 echo "Nginx configuration has been successfully updated."
 
-# Setup tmux session for task 4 
+# Setup tmux session for task four 
 cd /home/ubuntu/AirBnB_clone_v3
 tmux new-session -d 'gunicorn --bind 0.0.0.0:5002 api.v1.app:app'
 
-# Setup tmux session for task 5
+# Setup tmux session for task five
 cd /home/ubuntu/AirBnB_clone_v4
 git checkout app-server
 
