@@ -1,4 +1,4 @@
-cho "Updating Packages and Installing Requirements"
+echo "Updating Packages and Installing Requirements"
 
 # Update Package Manager
 sudo apt-get update
