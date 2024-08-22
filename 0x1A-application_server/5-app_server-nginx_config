@@ -1,33 +1,39 @@
 server {
-        listen 80 default_server;
-	listen [::]:80 default_server;
-	add_header X-Served-By "2177-web-01";
-	root /var/www/html;
-	index index.html index.htm;
+    listen 80 default_server;  # Listen on port 80 (IPv4)
+    listen [::]:80 default_server;  # Listen on port 80 (IPv6)
 
-	location /airbnb-onepage/ {
-		alias ~/Holberton_Projects/Airbnb_clone_v2/;
-		index index.html index.htm;
-		proxy_pass http://0.0.0.0:5000;
-	}
+    add_header X-Served-By "64760-web-01";  # Add custom header
 
-	location ~ /airbnb-dynamic/number_odd_or_even/(\d+)$ {
-		proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;
-	}
+    root /var/www/html;  # Root directory for static files
+    index index.html index.htm;  # Default index files
 
-	location /api {
-		proxy_pass http://127.0.0.1:5002/api;
-	}
+    location /airbnb-onepage/ {
+        alias ~/HBNB/Airbnb_clone_v2/;  # Path alias for project files
+        index index.html index.htm;  # Default index files for this location
+        proxy_pass http://0.0.0.0:5000;  # Proxy to backend on port 5000
+    }
 
-	location / {
-		proxy_pass http://127.0.0.1:5003/2-hbnb;
-	}
+    location ~ /airbnb-dynamic/number_odd_or_even/(\d+)$ {
+        proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;  # Proxy dynamic requests
+    }
 
-	location /static {
-		proxy_pass http://127.0.0.1:5003;
-	}
+    location /api {
+        proxy_pass http://127.0.0.1:5002/api;  # Proxy API requests
+    }
 
-	rewrite ^/redirect_me https://github.com/EstephaniaCalvoC/ permanent;
-        error_page 404 /my_404.html;
-        location = /my_404.html {root /usr/share/nginx/html; internal;}
+    location / {
+        proxy_pass http://127.0.0.1:5003/2-hbnb;  # Proxy to HBNB app
+    }
+
+    location /static {
+        proxy_pass http://127.0.0.1:5003;  # Proxy static files
+    }
+
+    rewrite ^/redirect_me https://github.com/Doroooh/ permanent;  # Permanent redirect
+
+    error_page 404 /my_404.html;  # Custom 404 error page
+    location = /my_404.html {
+        root /usr/share/nginx/html;  # Path to 404 error page
+        internal;  # Serve only on 404 errors
+    }
 }

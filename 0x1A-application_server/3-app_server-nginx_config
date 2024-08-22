@@ -1,18 +1,40 @@
 server {
-        listen 80 default_server;
-	listen [::]:80 default_server;
-	add_header X-Served-By "2177-web-01";
-	root /var/www/html;
-	index index.html index.htm;
-	location /airbnb-onepage/ {
-		alias ~/Airbnb_clone_v2/;
-		index index.html index.htm;
-		proxy_pass http://0.0.0.0:5000;
-	}
-	location ~ /airbnb-dynamic/number_odd_or_even/(\d+)$ {
-		proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;
-	}
-	rewrite ^/redirect_me https://github.com/EstephaniaCalvoC/ permanent;
-        error_page 404 /my_404.html;
-        location = /my_404.html {root /usr/share/nginx/html; internal;}
+    # Listen on port 80 for IPv4 and IPv6, set as default server
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    # Add a custom header to indicate which server handled the request
+    add_header X-Served-By "64760-web-01";
+
+    # Set the root directory for static files
+    root /var/www/html;
+
+    # Specify default files to serve
+    index index.html index.htm;
+
+    # Handle requests to /airbnb-onepage/
+    location /airbnb-onepage/ {
+        # Use the specified directory as the root for this location
+        alias ~/Airbnb_clone_v2/;
+        index index.html index.htm;  # Serve these index files
+        proxy_pass http://0.0.0.0:5000;  # Forward requests to backend service on port 5000
+    }
+
+    # Handle dynamic requests with a specific pattern
+    location ~ /airbnb-dynamic/number_odd_or_even/(\d+)$ {
+        # Forward the request to the backend service, including the captured number
+        proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;
+    }
+
+    # Redirect /redirect_me to a GitHub profile, permanently
+    rewrite ^/redirect_me https://github.com/Doroooh/ permanent;
+
+    # Serve a custom 404 error page
+    error_page 404 /my_404.html;
+
+    # Define how the custom 404 error page is served
+    location = /my_404.html {
+        root /usr/share/nginx/html;  # Use this directory to serve the error page
+        internal;  # Ensure this page is only accessible during a 404 error
+    }
 }

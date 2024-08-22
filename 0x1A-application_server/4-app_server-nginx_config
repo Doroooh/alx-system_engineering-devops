@@ -1,25 +1,45 @@
 server {
-        listen 80 default_server;
-	listen [::]:80 default_server;
-	add_header X-Served-By "2177-web-01";
-	root /var/www/html;
-	index index.html index.htm;
+    # Listen for incoming HTTP connections on port 80 (default server)
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-	location /airbnb-onepage/ {
-		alias ~/Holberton_Projects/Airbnb_clone_v2/;
-		index index.html index.htm;
-		proxy_pass http://0.0.0.0:5000;
-	}
+    # Add a custom header to identify the server handling the request
+    add_header X-Served-By "64760-web-01";
 
-	location ~ /airbnb-dynamic/number_odd_or_even/(\d+)$ {
-		proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;
-	}
+    # Set the root directory for serving static files
+    root /var/www/html;
 
-	location /api {
-		proxy_pass http://127.0.0.1:5002/api;
-	}
+    # Define the default files to look for when serving a directory
+    index index.html index.htm;
 
-	rewrite ^/redirect_me https://github.com/EstephaniaCalvoC/ permanent;
-        error_page 404 /my_404.html;
-        location = /my_404.html {root /usr/share/nginx/html; internal;}
+    # Serve the Airbnb clone project when accessing /airbnb-onepage/
+    location /airbnb-onepage/ {
+        # Alias the path to a specific directory containing the project files
+        alias ~/Holberton_Projects/Airbnb_clone_v2/;
+        index index.html index.htm;  # Serve these index files by default
+        proxy_pass http://0.0.0.0:5000;  # Forward requests to the backend service on port 5000
+    }
+
+    # Handle dynamic routing for checking if a number is odd or even
+    location ~ /airbnb-dynamic/number_odd_or_even/(\d+)$ {
+        # Forward the request, including the number captured, to a backend service
+        proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;
+    }
+
+    # Proxy API requests to a dedicated backend service
+    location /api {
+        proxy_pass http://127.0.0.1:5002/api;  # Forward /api requests to backend on port 5002
+    }
+
+    # Redirect requests to /redirect_me to a specified GitHub profile permanently
+    rewrite ^/redirect_me https://github.com/Doroooh/ permanent;
+
+    # Custom error handling for 404 Not Found errors
+    error_page 404 /my_404.html;
+
+    # Serve the custom 404 error page from a specific directory
+    location = /my_404.html {
+        root /usr/share/nginx/html;  # Specify the directory for the 404 page
+        internal;  # Ensure this page is only accessible when a 404 error occurs
+    }
 }
